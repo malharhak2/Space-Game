@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
+	public Transform cameraBox;
+
 	public float mass = 0.3f;
 	public float moveAcceleration = 0.3f;
 	public float maxMoveSpeed = 2.0f;
@@ -13,6 +15,8 @@ public class PlayerController : MonoBehaviour {
 	public float jumpTimeMargin = 0.2f;
 
 	public int jumpAllowed = 2;
+
+	public float elevatorSpeed = 50f;
 
 	private Vector3 acceleration = new Vector3(0f, 0f, 0f);
 	private Vector3 speed = new Vector3 (0f, 0f, 0f);
@@ -27,6 +31,13 @@ public class PlayerController : MonoBehaviour {
 	private float lastAngle;
 	private float stickAngle;
 	private float lastJumpAsk;
+
+	private bool elevating = false;
+	private bool canElevate = false;
+	private Vector3 elevateDirection;
+
+	private PlanetInformations planetInfos;
+
 	//debug
 	private Vector3 lastDiff;
 	// Use this for initialization
@@ -39,8 +50,8 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 
 	void processGravity () {
-		if (!floored) {
-			acceleration += new Vector3(0f, -mass, 0f);
+		if (!floored && !elevating) {
+			acceleration += new Vector3(0f, -mass * ((planetInfos != null) ? planetInfos.gravity : 1), 0f);
 		}
 
 		speed += Time.deltaTime * acceleration;
@@ -54,6 +65,8 @@ public class PlayerController : MonoBehaviour {
 	void floor () {
 		floored = true;
 		jumpCounter = 0;
+		elevating = false;
+		SendMessage("startStickingDown");
 		if (Time.time - lastJumpAsk < jumpTimeMargin) {
 			jump ();
 		}
@@ -92,8 +105,16 @@ public class PlayerController : MonoBehaviour {
 		}
 		Debug.DrawRay (transform.position, lastDiff * 5);
 		moveSpeed = Mathf.Lerp(moveSpeed, 0, (Time.time - lastInput) / slowdownTime);
-		transform.Translate (new Vector3(0, 0, moveSpeed) * Time.deltaTime, Space.Self);
+		if (!elevating) {
+			transform.Translate (new Vector3(0, 0, moveSpeed) * Time.deltaTime, Space.Self);
+		}
 
+	}
+
+	void processElevators () {
+		if (canElevate && !elevating && Input.GetButtonDown ("Fire3")) {
+			elevate (elevateDirection);
+		}
 	}
 	void Update () {
 		lastPosition = transform.position;
@@ -102,6 +123,7 @@ public class PlayerController : MonoBehaviour {
 
 		processGravity();
 		processMove();
+		processElevators();
 
 		if (Input.GetButtonDown ("Jump")) {
 			jump ();
@@ -110,9 +132,35 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider other) {
-		acceleration = Vector3.zero;
-		speed = Vector3.zero;
-		floor ();
+		if (other.tag == "Planet") {
+			acceleration = Vector3.zero;
+			speed = Vector3.zero;
+			floor ();
+			planetInfos = other.GetComponent<PlanetInformations>();
+		} else if (other.tag == "Elevator") {
+			canElevate = true;
+			elevateDirection = other.transform.forward;
+
+		}
+
+
+	}
+
+	void OnTriggerExit (Collider other) {
+		if (other.tag == "Elevator") {
+			canElevate = false;
+		}
+	}
+
+	void elevate (Vector3 direction) {
+		print ("Touched an elevator");
+		elevating = true;
+		canElevate = false;
+		acceleration.y += elevatorSpeed;
+		transform.rotation = Quaternion.FromToRotation (transform.up, direction) * transform.rotation;
+		floored = false;
+		SendMessage("stopStickingDown");
+
 	}
 
 	void OnGUI () {
@@ -126,7 +174,7 @@ public class PlayerController : MonoBehaviour {
 
 	void changePlanet (Transform newPlanet) {
 		print ("Changed planet");
-
+		elevating = false;
 		acceleration = Vector3.zero;
 		speed = Vector3.zero;
 		processGravity ();
