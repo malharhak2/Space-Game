@@ -103,10 +103,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   basePlanet: {fileID: 400000, guid: 90614a4d1e1441140b3efc39aac51ffb, type: 2}
-  minSize: 100
-  maxSize: 100
-  minPerlinIntensity: .300000012
-  maxPerlinIntensity: .5
+  minSize: 50
+  maxSize: 50
+  minPerlinIntensity: .200000003
+  maxPerlinIntensity: 1
   minGravity: .5
   maxGravity: 1.5
   rotateSpeed: 10
@@ -158,11 +158,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 10b814713fa680a40a5ea12c7aca8458, type: 2}
       propertyPath: minSize
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 10b814713fa680a40a5ea12c7aca8458, type: 2}
       propertyPath: maxSize
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 10b814713fa680a40a5ea12c7aca8458, type: 2}
       propertyPath: minGravity
@@ -171,6 +171,14 @@ Prefab:
     - target: {fileID: 11400000, guid: 10b814713fa680a40a5ea12c7aca8458, type: 2}
       propertyPath: maxGravity
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 10b814713fa680a40a5ea12c7aca8458, type: 2}
+      propertyPath: minPerlinIntensity
+      value: .200000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 10b814713fa680a40a5ea12c7aca8458, type: 2}
+      propertyPath: maxPerlinIntensity
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 10b814713fa680a40a5ea12c7aca8458, type: 2}
@@ -347,7 +355,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 759152784}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 250, z: 0}
+  m_LocalPosition: {x: 0, y: 130, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1927160177}
@@ -442,6 +450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetLerp: 1
   linkDistance: 10
+  rotateCatchupSpeed: 1
 --- !u!1 &1586084514
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,6 +493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   yDist: 10
   zDist: -5
+  rotationSpeed: 50
   player: {fileID: 759152785}
 --- !u!114 &1586084517
 MonoBehaviour:
@@ -498,6 +508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetLerp: 1
   linkDistance: 10
+  rotateCatchupSpeed: 1
 --- !u!1 &1684219955
 GameObject:
   m_ObjectHideFlags: 0

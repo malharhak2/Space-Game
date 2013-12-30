@@ -35,9 +35,9 @@ public class GeneratePlanet : MonoBehaviour {
 		Mesh mesh = planet.GetComponent<MeshFilter>().mesh;
 		Vector3[] vertices = mesh.vertices;
 
-		float timex = Time.time + 0.1365143f;
-		float timey = Time.time + 1.21688f;
-		float timez = Time.time + 2.5564f;
+		float timex = Random.Range (0, 1);// + 0.1365143f;
+		float timey = Random.Range (0, 1);// + 1.21688f;
+		float timez = Random.Range (0, 1);// + 2.5564f;
 
 		for (int i = 0; i < vertices.Length ; i++) {
 			Vector3 vertex = vertices[i];
