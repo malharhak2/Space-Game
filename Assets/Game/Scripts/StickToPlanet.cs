@@ -34,7 +34,6 @@ public class StickToPlanet : MonoBehaviour {
 			}
 		}
 		if (!touchedSomething && !flying) {
-			print ("Catchin up");
 			transform.Rotate (rotateCatchupSpeed * Time.deltaTime, 0f, 0f);
 		}
 		touchedSomething = false;

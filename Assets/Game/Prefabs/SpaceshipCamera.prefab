@@ -101,6 +101,7 @@ MonoBehaviour:
   speedImpact: .0199999996
   speedRotationImpact: 4.99999987e-05
   rotationSpeed: 50
+  roulisSpeed: .100000001
 --- !u!124 &12400000
 Behaviour:
   m_ObjectHideFlags: 1

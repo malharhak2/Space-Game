@@ -10,6 +10,7 @@ public class SpaceshipCamera : MonoBehaviour {
 	public float speedImpact = 0.01f;
 	public float speedRotationImpact = 50f;
 	public float rotationSpeed = 1.0f;
+	public float roulisSpeed = 1.0f;
 	// Use this for initialization
 	private SpaceshipControls spaceshipScript;
 	private Vector3 cameraDecalage;
@@ -36,7 +37,7 @@ public class SpaceshipCamera : MonoBehaviour {
 		transform.rotation = spaceship.rotation;
 		//transform.rotation = Quaternion.RotateTowards (transform.rotation, spaceship.rotation, rotationSpeed);
 		transform.Translate (translateIm, Space.Self);
-
+		transform.Rotate (0f, 0f, spaceshipScript.lastRoulis * roulisSpeed);
 
 		lastSpaceshipRotation = spaceship.rotation;
 		lastSpaceshipPosition = spaceship.position;
